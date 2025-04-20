@@ -5,6 +5,7 @@ import ImageUploadForm from '../component/form/ImageUploadForm';
 import ResultDisplay from '../component/form/ResultDisplay';
 import LoadingOverlay from '../component/LoadingOverlay';
 import Dialog from '../component/dialog/CustomDialog';
+import http from '../utils/http'; 
 
 function App() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -41,9 +42,6 @@ function App() {
 
   // Handle form submission
   const handleSubmit = async () => {
-    if (!selectedFile) {
-      setShowDialog
-    }
     setIsLoading(true);
     setError('');
     
@@ -51,9 +49,10 @@ function App() {
       const formData = new FormData();
       formData.append('image', selectedFile);
 
-      const response = await fetch('/predict', {
-        method: 'POST',
-        body: formData,
+      const response = await http.post('/predict', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
 
       if (!response.ok) {
@@ -81,28 +80,28 @@ function App() {
           <h2 className="text-2xl font-bold text-blue-600 mb-6">
             Nhận diện khuôn mặt ca sĩ
           </h2>
-            <div className='flex flex-grow gap-6'>
-              <div className='w-[320px] h-[250px] shrink-0'>
-                <ImageUploadForm 
-                  onFileSelect={handleFileSelect}
-                  selectedFile={selectedFile}
-                />
-              </div>
+          <div className="flex flex-grow gap-6">
+            <div className="w-[320px] h-[250px] shrink-0">
+              <ImageUploadForm 
+                onFileSelect={handleFileSelect}
+                selectedFile={selectedFile}
+              />
+            </div>
 
-              <div className='flex-1'>
-                {previewUrl && (
-                  <div className="relative mt-8">
-                    <ResultDisplay 
-                      imageUrl={previewUrl} 
-                      detections={detectionResults}
-                      isSuccess={isSuccess}
-                    />
-                  </div>
-                )}
-              </div>
+            <div className="flex-1">
+              {previewUrl && (
+                <div className="relative mt-0">
+                  <ResultDisplay 
+                    imageUrl={previewUrl} 
+                    detections={detectionResults}
+                    isSuccess={isSuccess}
+                  />
+                </div>
+              )}
             </div>
           </div>
-          <div className="flex justify-center">
+          </div>
+          <div className="flex justify-center p-6">
             <button
               type="button"
               onClick={handleSubmit}

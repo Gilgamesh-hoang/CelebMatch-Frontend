@@ -100,6 +100,7 @@ const ResultDisplay = ({ imageUrl, detections, isSuccess }) => {
             alt="Uploaded preview" 
             className="max-w-full h-auto mx-auto" 
             style={{ display: 'block' }}
+            className="max-w-[300px] h-auto mx-auto"
           />
           <canvas 
             ref={canvasRef} 
