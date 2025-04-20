@@ -8,12 +8,12 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "build:css":"postcss src/style/tailwinds.css -o src/style/main.css",
-    "build:watch" :"postcss src/style/tailwinds.css -o src/style/main.css --watch"
-
+    "build:css": "postcss src/style/tailwinds.css -o src/style/main.css",
+    "build:watch": "postcss src/style/tailwinds.css -o src/style/main.css --watch"
   },
   "dependencies": {
     "@ant-design/icons": "^5.6.1",
+    "@headlessui/react": "^2.2.2",
     "antd": "^5.24.6",
     "axios": "^1.8.4",
     "dayjs": "^1.11.13",
