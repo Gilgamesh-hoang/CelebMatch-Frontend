@@ -6,6 +6,7 @@ import VerticalNavigationLayout from "./layout/VerticalNavigationLayout.tsx";
 import {ExportOutlined} from "@ant-design/icons";
 import Nav from "./component/nav/Nav.tsx";
 import FaceUpload from "./pages/FaceUpload"
+import CompareImage from "./pages/CompareImage.tsx";
 
 function App() {
     const menuItems = Array.from({ length: 100 }, (_, index) => {
@@ -25,6 +26,7 @@ function App() {
                     <Route element={<NormalLayout/>}>
                         {/*<Route path="/login" element={<Login />} />*/}
                         <Route path="/upload-face" element={<FaceUpload />} />
+                        <Route path="/compare-face" element={<CompareImage />} />
                     </Route>
 
                     <Route path="/nav/" element={
