@@ -7,7 +7,7 @@ import LoadingOverlay from '../component/LoadingOverlay';
 import Dialog from '../component/dialog/CustomDialog';
 import http from '../utils/http'; 
 
-function App() {
+function FaceUpload() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -47,7 +47,7 @@ function App() {
     
     try {
       const formData = new FormData();
-      formData.append('image', selectedFile);
+      formData.append('upload_file', selectedFile);
 
       const response = await http.post('/predict', formData, {
         headers: {
@@ -132,4 +132,4 @@ function App() {
   );
 }
 
-export default App;
+export default FaceUpload;
