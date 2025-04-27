@@ -1,17 +1,21 @@
-import { useRef } from 'react';
+import { ChangeEvent, useRef, DragEvent } from 'react';
 
-const ImageUploadForm = ({ onFileSelect, selectedFile }) => {
-  const fileInputRef = useRef(null);
+interface ImageUploadFormProps {
+  onFileSelect: (file: File) => void;
+  selectedFile: File | null; 
+}
+const ImageUploadForm = ({ onFileSelect, selectedFile } : ImageUploadFormProps) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileChange = (e) => {
+  const handleFileChange = (e : ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       onFileSelect(e.target.files[0]);
     }
   };
 
-  const handleDragOver = (e) => e.preventDefault();
+  const handleDragOver = (e: DragEvent<HTMLDivElement>) => e.preventDefault();
 
-  const handleDrop = (e) => {
+  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       onFileSelect(e.dataTransfer.files[0]);
@@ -19,7 +23,7 @@ const ImageUploadForm = ({ onFileSelect, selectedFile }) => {
   };
 
   const triggerFileInput = () => {
-    fileInputRef.current.click();
+    fileInputRef.current?.click();
   };
 
   return (
