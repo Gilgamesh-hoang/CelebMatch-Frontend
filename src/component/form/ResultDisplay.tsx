@@ -77,8 +77,8 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ imageUrl, detections, isS
     const imgHeight = img.clientHeight;
     
     // Tính toán tỷ lệ co/giãn của ảnh
-    const scaleX = imgWidth / img.naturalWidth;
-    const scaleY = imgHeight / img.naturalHeight;
+    // const scaleX = imgWidth / img.naturalWidth;
+    // const scaleY = imgHeight / img.naturalHeight;
     
     // Tính toán vị trí và kích thước của box sau khi scale
     const left = box.x * imgWidth;

@@ -1,33 +1,28 @@
-import { useState } from 'react';
+import {useState} from 'react';
 import Header from '../component/Header';
 import Footer from '../component/Footer';
 import ImageUploadForm from '../component/form/ImageUploadForm';
-import ResultDisplay from '../component/form/ResultDisplay';
 import LoadingOverlay from '../component/LoadingOverlay';
 import Dialog from '../component/dialog/CustomDialog';
 import http from '../utils/http';
-import {DetectionResult, VerificationResult} from "../types/result-compare.type.ts";
+import {VerificationResult} from '../types/result-compare.type.ts';
+import ResultDisplay from '../component/form/ResultDisplay.tsx';
+import {AxiosError} from "axios";
 
 function App() {
     const [selectedFiles, setSelectedFiles] = useState<(File | null)[]>([null, null]);
     const [previewUrls, setPreviewUrls] = useState<string[]>(['', '']);
-    const [detectionResults, setDetectionResults] = useState<DetectionResult[][]>([[], []]);
-    const [isSuccess, setIsSuccess] = useState<boolean[]>([false, false]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
-    const [showDialog, setShowDialog] = useState(false);
+    const [showErrorDialog, setShowErrorDialog] = useState(false);
     const [showResultDialog, setShowResultDialog] = useState(false);
-    const [resultData, setResultData] = useState<VerificationResult | null>(null);
+    const [verificationResult, setVerificationResult] = useState<VerificationResult | null>(null);
 
     const handleFileSelect = (file: File | null, index: number) => {
         const newFiles = [...selectedFiles];
         const newPreviews = [...previewUrls];
-        const newResults = [...detectionResults];
-        const newSuccess = [...isSuccess];
 
         newFiles[index] = file;
-        newResults[index] = [];
-        newSuccess[index] = false;
 
         if (file) {
             const reader = new FileReader();
@@ -42,17 +37,14 @@ function App() {
 
         setSelectedFiles(newFiles);
         setPreviewUrls(newPreviews);
-        setDetectionResults(newResults);
-        setIsSuccess(newSuccess);
     };
 
     const handleReset = () => {
         setSelectedFiles([null, null]);
         setPreviewUrls(['', '']);
-        setDetectionResults([[], []]);
-        setIsSuccess([false, false]);
+        setVerificationResult(null);
         setError('');
-        setShowDialog(false);
+        setShowErrorDialog(false);
         setShowResultDialog(false);
     };
 
@@ -64,31 +56,35 @@ function App() {
 
         try {
             const formData = new FormData();
-            formData.append('image1', selectedFiles[0] as File);
-            formData.append('image2', selectedFiles[1] as File);
+            formData.append('files', selectedFiles[0]);
+            formData.append('files', selectedFiles[1]);
 
             const response = await http.post('/verify', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
+                headers: {'Content-Type': 'multipart/form-data'},
             });
 
             if (response.status !== 200) {
                 throw new Error(`Server trả lỗi: ${response.status}`);
             }
 
-            const data = response.data;
+            const data: VerificationResult = response.data;
 
-            if (data.is_same_person !== undefined && data.similarity_score !== undefined) {
-                setDetectionResults([data.is_same_person, data.similarity_score]);
-                setIsSuccess([true, true]);
-                setResultData(data);
+            if (typeof data.is_same_person === 'boolean' && typeof data.similarity_score === 'number') {
+                setVerificationResult(data);
                 setShowResultDialog(true);
             } else {
                 throw new Error('Dữ liệu trả về không hợp lệ.');
             }
-        } catch (err) {
+        } catch (err: unknown) {
             console.error(err);
-            setError('Đã xảy ra lỗi khi xử lý ảnh. Vui lòng thử lại sau.');
-            setShowDialog(true);
+
+            if (err instanceof AxiosError) {
+                setError(err.response?.data?.detail || 'Đã xảy ra lỗi khi xử lý ảnh. Vui lòng thử lại sau.');
+            } else {
+                setError('Đã xảy ra lỗi không xác định. Vui lòng thử lại sau.');
+            }
+
+            setShowErrorDialog(true);
         } finally {
             setIsLoading(false);
         }
@@ -96,7 +92,7 @@ function App() {
 
     return (
         <div className="min-h-screen flex flex-col bg-gray-50">
-            <Header />
+            <Header/>
 
             <main className="flex-grow container mx-auto px-4 py-8">
                 <div className="max-w-5xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
@@ -116,8 +112,8 @@ function App() {
                                         <div className="mt-4">
                                             <ResultDisplay
                                                 imageUrl={previewUrls[index]}
-                                                detections={detectionResults[index]}
-                                                isSuccess={isSuccess[index]}
+                                                detections={[]} // không cần detection trong bước compare
+                                                isSuccess={!!selectedFiles[index]}
                                             />
                                         </div>
                                     )}
@@ -151,13 +147,13 @@ function App() {
                 </div>
 
                 <Dialog
-                    isOpen={showDialog}
-                    onClose={() => setShowDialog(false)}
+                    isOpen={showErrorDialog}
+                    onClose={() => setShowErrorDialog(false)}
                     title="Thông báo"
                     message={error}
                 />
 
-                {showResultDialog && resultData && (
+                {showResultDialog && verificationResult && (
                     <Dialog
                         isOpen={showResultDialog}
                         onClose={() => setShowResultDialog(false)}
@@ -165,10 +161,10 @@ function App() {
                         message={
                             <>
                                 <p>
-                                    <strong>Is Same Person:</strong> {resultData.is_same_person ? 'Có' : 'Không'}
+                                    <strong>Giống nhau:</strong> {verificationResult.is_same_person ? 'Có' : 'Không'}
                                 </p>
                                 <p>
-                                    <strong>Similarity Score:</strong> {resultData.similarity_score}%
+                                    <strong>Độ tương đồng:</strong> {verificationResult.similarity_score.toFixed(2)}%
                                 </p>
                             </>
                         }
@@ -176,8 +172,8 @@ function App() {
                 )}
             </main>
 
-            <Footer />
-            {isLoading && <LoadingOverlay />}
+            <Footer/>
+            {isLoading && <LoadingOverlay/>}
         </div>
     );
 }
