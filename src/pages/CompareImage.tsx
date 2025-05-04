@@ -6,7 +6,6 @@ import LoadingOverlay from '../component/LoadingOverlay';
 import Dialog from '../component/dialog/CustomDialog';
 import http from '../utils/http';
 import {VerificationResult} from '../types/result-compare.type.ts';
-import ResultDisplay from '../component/form/ResultDisplay.tsx';
 import {AxiosError} from "axios";
 
 function App() {
@@ -72,6 +71,7 @@ function App() {
             if (typeof data.is_same_person === 'boolean' && typeof data.similarity_score === 'number') {
                 setVerificationResult(data);
                 setShowResultDialog(true);
+
             } else {
                 throw new Error('Dữ liệu trả về không hợp lệ.');
             }
@@ -108,12 +108,21 @@ function App() {
                                         onFileSelect={(file) => handleFileSelect(file, index)}
                                         selectedFile={selectedFiles[index]}
                                     />
+                                    {/*{previewUrls[index] && (*/}
+                                    {/*    <div className="mt-4">*/}
+                                    {/*        <ResultDisplay*/}
+                                    {/*            imageUrl={previewUrls[index]}*/}
+                                    {/*            detections={[]} // không cần detection trong bước compare*/}
+                                    {/*            isSuccess={!!selectedFiles[index]}*/}
+                                    {/*        />*/}
+                                    {/*    </div>*/}
+                                    {/*)}*/}
                                     {previewUrls[index] && (
                                         <div className="mt-4">
-                                            <ResultDisplay
-                                                imageUrl={previewUrls[index]}
-                                                detections={[]} // không cần detection trong bước compare
-                                                isSuccess={!!selectedFiles[index]}
+                                            <img
+                                                src={previewUrls[index]}
+                                                alt={`Preview ${index + 1}`}
+                                                className="w-full h-auto rounded shadow"
                                             />
                                         </div>
                                     )}

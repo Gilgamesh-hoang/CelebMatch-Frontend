@@ -6,11 +6,13 @@ interface ResultDisplayProps {
   isSuccess?: boolean;
   compactMode?: boolean;  
 }
+type Item = string | { name?: string; title?: string; [key: string]: unknown };
+
 const ResultDisplay: React.FC<ResultDisplayProps> = ({ imageUrl, detections, isSuccess }) => {
   const imgRef = useRef<HTMLImageElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+  const [, setContainerSize] = useState({ width: 0, height: 0 });
 
   // Theo dõi khi ảnh tải và cập nhật state
   useEffect(() => {
@@ -315,26 +317,30 @@ const stripHtml = (html: string | undefined): string => {
 };
 
 // Function to extract first few items from HTML list
-const extractListItems = (items: any[] | string | undefined, maxItems = 5): string[] => {
+const extractListItems = (
+    items: Item[] | string | undefined,
+    maxItems = 5
+): string[] => {
   if (!items) return [];
-  
+
   if (typeof items === 'string' && items.includes('<li>')) {
     const matches = items.match(/<li>(.*?)<\/li>/g);
     if (!matches) return [];
-    
+
     return matches
-      .slice(0, maxItems)
-      .map(item => item.replace(/<\/?[^>]+(>|$)/g, "").trim());
+        .slice(0, maxItems)
+        .map(item => item.replace(/<\/?[^>]+(>|$)/g, "").trim());
   }
-  
+
   if (Array.isArray(items)) {
     return items.slice(0, maxItems).map(item => {
       if (typeof item === 'string') return item;
       return item.name || item.title || JSON.stringify(item);
     });
   }
-  
+
   return [];
 };
+
 
 export default ResultDisplay;

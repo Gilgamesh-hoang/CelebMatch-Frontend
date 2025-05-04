@@ -6,6 +6,7 @@ import { ExportOutlined } from "@ant-design/icons";
 import Nav from "./component/nav/Nav.tsx";
 import FaceUpload from "./pages/FaceUpload";
 import CompareImage from "./pages/CompareImage.tsx";
+import LookALike from "./pages/LookALike.tsx";
 
 function App() {
     const menuItems = [
@@ -17,6 +18,11 @@ function App() {
         {
             key: 'compare-face',
             label: 'So sánh khuôn mặt',
+            icon: <ExportOutlined />
+        },
+        {
+            key: 'look-like',
+            label: 'Tìm người giống nhau',
             icon: <ExportOutlined />
         },
         ...Array.from({ length: 99 }, (_, index) => ({
@@ -45,6 +51,7 @@ function App() {
                     }>
                         <Route path="face-upload" element={<FaceUpload />} />
                         <Route path="compare-face" element={<CompareImage />} />
+                        <Route path="look-like" element={<LookALike />} />
                         {menuItems.slice(1).map((menuItem) => (
                             <Route key={menuItem.key} path={menuItem.key} element={<Nav label={menuItem.label} />} />
                         ))}
