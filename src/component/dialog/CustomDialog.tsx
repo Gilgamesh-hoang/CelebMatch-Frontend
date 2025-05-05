@@ -1,7 +1,10 @@
-// components/Dialog.js
-import React from 'react';
-
-const Dialog = ({ isOpen, onClose, title, message }) => {
+type DialogProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  title: string;
+  message: React.ReactNode;
+};
+const Dialog: React.FC<DialogProps> = ({ isOpen, onClose, title, message }) => {
   if (!isOpen) return null;
 
   return (
