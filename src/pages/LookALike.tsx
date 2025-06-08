@@ -174,7 +174,7 @@ function LookALike() {
                                     <strong>Bài hát nổi bật:</strong>
                                     <div dangerouslySetInnerHTML={{ __html: result.singer.songs }} />
                                 </div>
-                                <p className="mt-2 text-sm text-gray-600">
+                                <p className="mt-2 text-sm text-red-500">
                                     Mức độ giống: {result.similarity.toFixed(2)}%
                                 </p>
                             </div>
