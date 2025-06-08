@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
-import Header from '../component/Header';
-import Footer from '../component/Footer';
 import ImageUploadForm from '../component/form/ImageUploadForm';
 import ResultDisplay from '../component/form/ResultDisplay';
 import LoadingOverlay from '../component/LoadingOverlay';
 import Dialog from '../component/dialog/CustomDialog';
 import http from '../utils/http';
-import { Detection} from '../types/detect-face';  
+import { Detection} from '../types/detect-face';
 
 interface ServerResponse {
   probability: number;
@@ -17,8 +15,8 @@ interface ServerResponse {
     biography: string;
     nationality: string;
     image_url: string | null;
-    songs?: any[];
-    awards?: any[];
+    songs?: string[];
+    awards?: string[];
   };
 }
 
@@ -112,11 +110,11 @@ function FaceUpload() {
             birth_date: item.singer.birth_date,
             bio: item.singer.biography.replace(/<\/?[^>]+(>|$)/g, "").substring(0, 300) + "...",
             genres: ["Ca sĩ", item.singer.nationality],
-            image: item.singer.image_url || undefined // Changed from null to undefined
+            image: item.singer.image_url || undefined,
           },
           singer: {
-            songs: item.singer.songs || undefined, // Changed from null to undefined
-            awards: item.singer.awards || undefined // Changed from null to undefined
+            songs: item.singer.songs || undefined,
+            awards: item.singer.awards || undefined
           }
         };
       });
@@ -133,84 +131,69 @@ function FaceUpload() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
-      <Header />
-
-      <main className="flex-grow container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
-          <div className="p-6">
-            <h2 className="text-2xl font-bold text-blue-600 mb-6">
+      <div className="min-h-screen flex flex-col bg-gradient-to-br from-indigo-50 to-white">
+        <main className="flex-grow container mx-auto px-4 py-8">
+          <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden p-6">
+            <h2 className="text-3xl font-bold text-center text-indigo-700 mb-8">
               Nhận diện khuôn mặt ca sĩ
             </h2>
-            
-            {/* Phần layout mới với 2 cột cố định */}
-            <div className="flex flex-col lg:flex-row gap-6">
-              {/* Cột trái: Upload form */}
-              <div className="lg:w-1/3 space-y-6">
-                <div className="w-full">
-                  <ImageUploadForm 
+
+            <div className="flex flex-col lg:flex-row gap-8">
+              <div className="lg:w-1/3 flex flex-col gap-6">
+                <ImageUploadForm
                     onFileSelect={handleFileSelect}
                     selectedFile={selectedFile}
-                  />
-                </div>
-                
-                <div className="flex justify-center">
-                  <button
+                />
+
+                <button
                     type="button"
                     onClick={handleSubmit}
                     disabled={!selectedFile || isLoading}
-                    className={`w-full px-6 py-3 rounded-lg text-white font-semibold transition duration-300 ease-in-out ${
-                      selectedFile && !isLoading
-                        ? 'bg-indigo-600 hover:bg-indigo-700 shadow-lg hover:shadow-xl'
-                        : 'bg-gray-400 cursor-not-allowed'
-                    } focus:outline-none focus:ring-4 focus:ring-indigo-300 focus:ring-opacity-50`}
-                  >
-                    {isLoading ? 'Đang xử lý...' : 'Nhận diện khuôn mặt'}
-                  </button>
-                </div>
-                
-                {/* Preview khi chưa có kết quả */}
+                    className={`w-full px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
+                        selectedFile && !isLoading
+                            ? 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-md hover:shadow-lg'
+                            : 'bg-gray-300 text-gray-600 cursor-not-allowed'
+                    }`}
+                >
+                  {isLoading ? 'Đang xử lý...' : 'Nhận diện khuôn mặt'}
+                </button>
+
                 {previewUrl && !isSuccess && (
-                  <div className="relative mt-4 border rounded-lg overflow-hidden shadow-sm">
-                    <img 
-                      src={previewUrl} 
-                      alt="Preview" 
-                      className="w-full h-auto" 
-                    />
-                  </div>
+                    <div className="relative mt-4 rounded-xl border shadow-sm overflow-hidden">
+                      <img
+                          src={previewUrl}
+                          alt="Ảnh xem trước"
+                          className="w-full h-auto object-contain"
+                      />
+                    </div>
                 )}
               </div>
-              
-              {/* Cột phải: Kết quả */}
+
               <div className="lg:w-2/3">
                 {isSuccess && (
-                  <div className="relative w-full">
-                    <ResultDisplay 
-                      imageUrl={previewUrl} 
-                      detections={detectionResults} 
-                      isSuccess={isSuccess}
-                      compactMode={true} 
+                    <ResultDisplay
+                        imageUrl={previewUrl}
+                        detections={detectionResults}
+                        isSuccess={isSuccess}
+                        compactMode={true}
                     />
-                  </div>
                 )}
               </div>
             </div>
           </div>
-        </div>
 
-        <Dialog
-          isOpen={showDialog}
-          onClose={() => setShowDialog(false)}
-          title="Thông báo"
-          message={error}
-        />
-      </main>
+          <Dialog
+              isOpen={showDialog}
+              onClose={() => setShowDialog(false)}
+              title="Thông báo"
+              message={error}
+          />
+        </main>
 
-      <Footer />
-
-      {isLoading && <LoadingOverlay />}
-    </div>
+        {isLoading && <LoadingOverlay />}
+      </div>
   );
+
 }
 
 export default FaceUpload;

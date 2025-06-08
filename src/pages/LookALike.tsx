@@ -1,6 +1,4 @@
 import { useState } from 'react';
-import Header from '../component/Header';
-import Footer from '../component/Footer';
 import ImageUploadForm from '../component/form/ImageUploadForm';
 import LoadingOverlay from '../component/LoadingOverlay';
 import Dialog from '../component/dialog/CustomDialog';
@@ -94,8 +92,6 @@ function LookALike() {
 
     return (
         <div className="min-h-screen flex flex-col bg-gray-50">
-            <Header />
-
             <main className="flex-grow container mx-auto px-4 py-8">
                 <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
                     <div className="p-6">
@@ -119,15 +115,14 @@ function LookALike() {
                             </div>
                         )}
 
-                        <div className="mt-6 flex justify-center gap-7">
+                        <div className="mt-6 flex justify-center">
                             <button
                                 type="button"
                                 onClick={handleCheckLookalike}
                                 disabled={!selectedFile}
-                                className={`px-6 py-2 rounded-lg text-white font-semibold transition ${
-                                    selectedFile
-                                        ? 'bg-indigo-600 hover:bg-indigo-700'
-                                        : 'bg-gray-400 cursor-not-allowed'
+                                className={`px-6 py-2 rounded-lg text-white font-semibold transition ${selectedFile
+                                    ? 'bg-indigo-600 hover:bg-indigo-700'
+                                    : 'bg-gray-400 cursor-not-allowed'
                                 }`}
                             >
                                 Tìm người giống bạn
@@ -136,11 +131,12 @@ function LookALike() {
                             <button
                                 type="button"
                                 onClick={handleReset}
-                                className="px-6 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white font-semibold transition"
+                                className="ml-6 px-6 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white font-semibold transition"
                             >
-                                Reset
+                                Làm mới
                             </button>
                         </div>
+
                     </div>
                 </div>
 
@@ -184,7 +180,6 @@ function LookALike() {
 
             </main>
 
-            <Footer />
             {isLoading && <LoadingOverlay />}
         </div>
     );
