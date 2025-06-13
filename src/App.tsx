@@ -3,10 +3,10 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import NormalLayout from "./layout/NormalLayout.tsx";
 import VerticalNavigationLayout from "./layout/VerticalNavigationLayout.tsx";
 import { ExportOutlined } from "@ant-design/icons";
-import Nav from "./component/nav/Nav.tsx";
 import FaceUpload from "./pages/FaceUpload";
 import CompareImage from "./pages/CompareImage.tsx";
 import LookALike from "./pages/LookALike.tsx";
+import Search from "./pages/Search.tsx";
 
 function App() {
     const menuItems = [
@@ -25,6 +25,11 @@ function App() {
             label: 'Tìm người giống nhau',
             icon: <ExportOutlined />
         },
+        {
+            key: 'search',
+            label: 'Tìm kiếm',
+            icon: <ExportOutlined />
+        },
         ...Array.from({ length: 99 }, (_, index) => ({
             key: `nav-${index + 1}`,
             label: `Nav ${index + 1}`,
@@ -36,14 +41,13 @@ function App() {
         <BrowserRouter>
             <div className="App">
                 <Routes>
-                    <Route path="/" element={<Navigate to="/nav/face-upload" replace />} />
+                    <Route path="/" element={<Navigate to="/feature/face-upload" replace />} />
 
                     <Route element={<NormalLayout />}>
                         <Route path="/upload-face" element={<FaceUpload />} />
                     </Route>
 
-                    {/* Layout cho /nav */}
-                    <Route path="/nav" element={
+                    <Route path="/feature/" element={
                         <VerticalNavigationLayout
                             menuItems={menuItems}
                             defaultSelectedKey={menuItems[0].key}
@@ -52,9 +56,7 @@ function App() {
                         <Route path="face-upload" element={<FaceUpload />} />
                         <Route path="compare-face" element={<CompareImage />} />
                         <Route path="look-like" element={<LookALike />} />
-                        {menuItems.slice(1).map((menuItem) => (
-                            <Route key={menuItem.key} path={menuItem.key} element={<Nav label={menuItem.label} />} />
-                        ))}
+                        <Route path='search' element={<Search />} />
                     </Route>
                 </Routes>
             </div>

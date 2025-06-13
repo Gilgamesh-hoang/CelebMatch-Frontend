@@ -6,7 +6,7 @@ import ResultDisplay from '../component/form/ResultDisplay';
 import LoadingOverlay from '../component/LoadingOverlay';
 import Dialog from '../component/dialog/CustomDialog';
 import http from '../utils/http';
-import { Detection} from '../types/detect-face';  
+import { Detection} from '../types/detect-face.type.ts';
 
 interface ServerResponse {
   probability: number;
