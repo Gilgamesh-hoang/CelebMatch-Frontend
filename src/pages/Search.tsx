@@ -16,7 +16,7 @@ const Search = () => {
                         isSearching ? <Spin/> : (
                             result.length ? (
                                 <div className="grid">
-                                    <div className="justify-self-end text-lg">Tìm thấy <strong>{result.length}</strong> phù hợp</div>
+                                    <div className="justify-self-end text-lg">Tìm thấy <strong>{result.length}</strong> kết quả phù hợp</div>
                                     <Tabs
                                         tabPosition="left"
                                         items={result.map((item) => {
@@ -55,7 +55,7 @@ const Search = () => {
                                                                                       d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                                                             </svg>
                                                                             <span className="font-medium">Ngày sinh:</span>
-                                                                            <span className="ml-2">{new Date(item.birth_date).toDateString()}</span>
+                                                                            <span className="ml-2">{new Date(item.birth_date).toLocaleDateString('vi-VN')}</span>
                                                                         </div>
                                                                     )}
 
