@@ -114,8 +114,8 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ imageUrl, detections, isS
           {imageLoaded && detections && detections.map((detection, index) => {
             const boxStyle = calculateBoundingBoxStyle(detection.bounding_box);
             console.log("có bounding box", detection.bounding_box);
-            const confidence = Math.round(detection.confidence * 100);
-            
+            const confidence = (detection.confidence * 100).toFixed(1);
+
             return (
               <div 
                 key={index}
@@ -202,7 +202,7 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ imageUrl, detections, isS
                       {detection.artist?.name || 'Không có thông tin'}
                     </h3>
                     <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-white text-indigo-700">
-                      #{index + 1} • {Math.round(detection.confidence * 100)}% tin cậy
+                      #{index + 1} • {(detection.confidence * 100).toFixed(1)}% tin cậy
                     </span>
                   </div>
                 </div>

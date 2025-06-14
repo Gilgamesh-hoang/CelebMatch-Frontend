@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import {useState} from 'react';
 import ImageUploadForm from '../component/form/ImageUploadForm';
 import LoadingOverlay from '../component/LoadingOverlay';
 import Dialog from '../component/dialog/CustomDialog';
 import http from '../utils/http';
-import { AxiosError } from 'axios';
+import {AxiosError} from 'axios';
 
 type LookalikeResultItem = {
     singer: {
@@ -60,7 +60,7 @@ function LookALike() {
             formData.append('upload_file', selectedFile);
 
             const response = await http.post('/lookalike', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
+                headers: {'Content-Type': 'multipart/form-data'},
             });
 
             if (response.status !== 200) {
@@ -71,8 +71,7 @@ function LookALike() {
             if (Array.isArray(data) && data.length > 0) {
                 setLookalikeResult(data);
                 setShowResultDialog(true);
-            }
-            else {
+            } else {
                 throw new Error('Dữ liệu trả về không hợp lệ');
             }
         } catch (err: unknown) {
@@ -160,18 +159,18 @@ function LookALike() {
                                 <p><strong>Nơi ở:</strong> {result.singer.residence}</p>
                                 <div className="mt-2">
                                     <strong>Tiểu sử:</strong>
-                                    <div dangerouslySetInnerHTML={{ __html: result.singer.biography }} />
+                                    <div dangerouslySetInnerHTML={{__html: result.singer.biography}}/>
                                 </div>
                                 <div className="mt-2">
                                     <strong>Giải thưởng:</strong>
-                                    <div dangerouslySetInnerHTML={{ __html: result.singer.awards }} />
+                                    <div dangerouslySetInnerHTML={{__html: result.singer.awards}}/>
                                 </div>
                                 <div className="mt-2">
                                     <strong>Bài hát nổi bật:</strong>
-                                    <div dangerouslySetInnerHTML={{ __html: result.singer.songs }} />
+                                    <div dangerouslySetInnerHTML={{__html: result.singer.songs}}/>
                                 </div>
                                 <p className="mt-2 text-sm text-red-500">
-                                    Mức độ giống: {result.similarity.toFixed(2)}%
+                                    Mức độ giống: {(result.similarity * 100).toFixed(2)}%
                                 </p>
                             </div>
                         ))}
@@ -180,7 +179,7 @@ function LookALike() {
 
             </main>
 
-            {isLoading && <LoadingOverlay />}
+            {isLoading && <LoadingOverlay/>}
         </div>
     );
 }

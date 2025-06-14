@@ -96,7 +96,7 @@ function CompareImage() {
                         </p>
                         <p>
                             <strong>Độ tương đồng:</strong>{' '}
-                            {verificationResult.similarity_score.toFixed(2)}%
+                            {(verificationResult.similarity_score * 100).toFixed(2)}%
                         </p>
                     </Modal>
                 )}
