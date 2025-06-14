@@ -1,65 +1,65 @@
-import './App.css'
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import NormalLayout from "./layout/NormalLayout.tsx";
-import VerticalNavigationLayout from "./layout/VerticalNavigationLayout.tsx";
-import { ExportOutlined } from "@ant-design/icons";
-import Nav from "./component/nav/Nav.tsx";
+import {PictureOutlined, SearchOutlined, UserOutlined} from "@ant-design/icons";
+import type {MenuProps} from 'antd';
+import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
+import './App.css';
+import Nav from "./component/nav/Nav";
+import VerticalNavigationLayout from "./layout/VerticalNavigationLayout";
+import CompareImage from "./pages/CompareImage";
 import FaceUpload from "./pages/FaceUpload";
-import CompareImage from "./pages/CompareImage.tsx";
-import LookALike from "./pages/LookALike.tsx";
+import LookALike from "./pages/LookALike";
+
+
+// Kiểu MenuItem đúng chuẩn Ant Design
+type MenuItem = Required<MenuProps>['items'][number];
 
 function App() {
-    const menuItems = [
+    const menuItems: MenuItem[] = [
         {
             key: 'face-upload',
             label: 'Nhận diện khuôn mặt',
-            icon: <ExportOutlined />
+            icon: <UserOutlined/>
         },
         {
             key: 'compare-face',
             label: 'So sánh khuôn mặt',
-            icon: <ExportOutlined />
+            icon: <PictureOutlined/>
         },
         {
             key: 'look-like',
             label: 'Tìm người giống nhau',
-            icon: <ExportOutlined />
+            icon: <SearchOutlined/>
         },
-        ...Array.from({ length: 99 }, (_, index) => ({
-            key: `nav-${index + 1}`,
-            label: `Nav ${index + 1}`,
-            icon: <ExportOutlined />
-        }))
     ];
 
     return (
         <BrowserRouter>
-            <div className="App">
-                <Routes>
-                    <Route path="/" element={<Navigate to="/nav/face-upload" replace />} />
+            <Routes>
+                <Route path="/" element={<Navigate to="/nav/face-upload" replace/>}/>
+                <Route path="/nav" element={
+                    <VerticalNavigationLayout
+                        menuItems={menuItems}
+                        defaultSelectedKey={menuItems.length > 0 ? (menuItems[0]!.key as string) : ''}
+                    />
+                }>
+                    <Route path="face-upload" element={<FaceUpload/>}/>
+                    <Route path="compare-face" element={<CompareImage/>}/>
+                    <Route path="look-like" element={<LookALike/>}/>
+                    {menuItems.slice(3).map((menuItem) => {
+                        if (!menuItem || !('label' in menuItem)) return null;
 
-                    <Route element={<NormalLayout />}>
-                        <Route path="/upload-face" element={<FaceUpload />} />
-                    </Route>
+                        return (
+                            <Route
+                                key={menuItem.key as string}
+                                path={menuItem.key as string}
+                                element={<Nav label={menuItem.label as string} />}
+                            />
+                        );
+                    })}
 
-                    {/* Layout cho /nav */}
-                    <Route path="/nav" element={
-                        <VerticalNavigationLayout
-                            menuItems={menuItems}
-                            defaultSelectedKey={menuItems[0].key}
-                        />
-                    }>
-                        <Route path="face-upload" element={<FaceUpload />} />
-                        <Route path="compare-face" element={<CompareImage />} />
-                        <Route path="look-like" element={<LookALike />} />
-                        {menuItems.slice(1).map((menuItem) => (
-                            <Route key={menuItem.key} path={menuItem.key} element={<Nav label={menuItem.label} />} />
-                        ))}
-                    </Route>
-                </Routes>
-            </div>
+                </Route>
+            </Routes>
         </BrowserRouter>
-    )
+    );
 }
 
-export default App
+export default App;
