@@ -14,7 +14,6 @@ interface Props {
 const SearchForm = ({setResult, setIsSearching}: Props) => {
     const [form] = Form.useForm<SearchFormType>();
     const [songs, setSongs] = useState<string[]>([]);
-    // const {songs, awards} = form.getFieldsValue()
     const [awards, setAwards] = useState<string[]>([]);
 
 
@@ -68,7 +67,6 @@ const SearchForm = ({setResult, setIsSearching}: Props) => {
     };
 
     const onFinish = async (body: SearchFormType) => {
-        setResult(null)
         const hasAtLeastOne =
             (body.songs && body.songs.length > 0) ||
             (body.awards && body.awards.length > 0) ||

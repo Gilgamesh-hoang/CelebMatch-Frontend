@@ -31,15 +31,15 @@ function App() {
         {
             key: 'search',
             label: 'Tìm kiếm',
-            // icon: <ExportOutlined />
-        },
+            icon: <SearchOutlined />
+        }
     ];
 
     return (
         <BrowserRouter>
             <div className="App">
                 <Routes>
-                    <Route path="/" element={<Navigate to="/nav/face-upload" replace />} />
+                    <Route path="/" element={<Navigate to="/feature/face-upload" replace />} />
                     <Route path="/feature/" element={
                         <VerticalNavigationLayout
                             menuItems={menuItems}
