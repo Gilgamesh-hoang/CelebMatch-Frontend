@@ -1,56 +1,49 @@
-import './App.css'
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import NormalLayout from "./layout/NormalLayout.tsx";
-import VerticalNavigationLayout from "./layout/VerticalNavigationLayout.tsx";
-import { ExportOutlined } from "@ant-design/icons";
+import {PictureOutlined, SearchOutlined, UserOutlined} from "@ant-design/icons";
+import type {MenuProps} from 'antd';
+import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
+import './App.css';
+import VerticalNavigationLayout from "./layout/VerticalNavigationLayout";
+import CompareImage from "./pages/CompareImage";
 import FaceUpload from "./pages/FaceUpload";
-import CompareImage from "./pages/CompareImage.tsx";
 import LookALike from "./pages/LookALike.tsx";
 import Search from "./pages/Search.tsx";
 
+// Kiểu MenuItem đúng chuẩn Ant Design
+type MenuItem = Required<MenuProps>['items'][number];
+
 function App() {
-    const menuItems = [
+    const menuItems: MenuItem[] = [
         {
             key: 'face-upload',
             label: 'Nhận diện khuôn mặt',
-            icon: <ExportOutlined />
+            icon: <UserOutlined/>
         },
         {
             key: 'compare-face',
             label: 'So sánh khuôn mặt',
-            icon: <ExportOutlined />
+            icon: <PictureOutlined/>
         },
         {
             key: 'look-like',
             label: 'Tìm người giống nhau',
-            icon: <ExportOutlined />
+            icon: <SearchOutlined/>
         },
         {
             key: 'search',
             label: 'Tìm kiếm',
-            icon: <ExportOutlined />
+            // icon: <ExportOutlined />
         },
-        ...Array.from({ length: 99 }, (_, index) => ({
-            key: `nav-${index + 1}`,
-            label: `Nav ${index + 1}`,
-            icon: <ExportOutlined />
-        }))
     ];
 
     return (
         <BrowserRouter>
             <div className="App">
                 <Routes>
-                    <Route path="/" element={<Navigate to="/feature/face-upload" replace />} />
-
-                    <Route element={<NormalLayout />}>
-                        <Route path="/upload-face" element={<FaceUpload />} />
-                    </Route>
-
+                    <Route path="/" element={<Navigate to="/nav/face-upload" replace />} />
                     <Route path="/feature/" element={
                         <VerticalNavigationLayout
                             menuItems={menuItems}
-                            defaultSelectedKey={menuItems[0].key}
+                            defaultSelectedKey={menuItems.length > 0 ? (menuItems[0]!.key as string) : ''}
                         />
                     }>
                         <Route path="face-upload" element={<FaceUpload />} />
@@ -61,7 +54,7 @@ function App() {
                 </Routes>
             </div>
         </BrowserRouter>
-    )
+    );
 }
 
-export default App
+export default App;
