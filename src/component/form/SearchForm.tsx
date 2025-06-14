@@ -68,6 +68,7 @@ const SearchForm = ({setResult, setIsSearching}: Props) => {
     };
 
     const onFinish = async (body: SearchFormType) => {
+        setResult(null)
         const hasAtLeastOne =
             (body.songs && body.songs.length > 0) ||
             (body.awards && body.awards.length > 0) ||
