@@ -69,7 +69,7 @@ const VerticalNavigationLayout = ({ menuItems, defaultSelectedKey }: Props) => {
                     items={menuItems}
                     onClick={({ key }) => {
                         setSelectedKey(key);
-                        navigate(`/nav/${key}`);
+                        navigate(`/feature/${key}`);
                     }}
                     style={{
                         backgroundColor: 'transparent',

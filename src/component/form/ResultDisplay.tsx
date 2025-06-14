@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Detection, BoundingBox } from '../../types/detect-face';  
+import { Detection, BoundingBox } from '../../types/detect-face.type.ts';
 interface ResultDisplayProps {
   imageUrl: string;
   detections?: Detection[];
