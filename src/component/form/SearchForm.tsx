@@ -1,30 +1,33 @@
-import {Button, Form, Input, Tag, message, Space} from "antd";
-import {SearchOutlined} from "@ant-design/icons";
+import {Button, Form, Input, message, Space, Tag} from "antd";
+import {SearchOutlined, UndoOutlined} from "@ant-design/icons";
 import {SearchFormType, SearchResultType} from "../../types/search-form.type.ts";
 import {useState} from "react";
 import http from "../../utils/http.ts";
 
-const { TextArea } = Input;
+const {TextArea} = Input;
 
 interface Props {
-    setResult: (data: SearchResultType) => void;
+    setResult: (data: SearchResultType | null) => void;
     setIsSearching: (isSearching: boolean) => void;
 }
 
 const SearchForm = ({setResult, setIsSearching}: Props) => {
     const [form] = Form.useForm<SearchFormType>();
     const [songs, setSongs] = useState<string[]>([]);
-    const [inputSong, setInputSong] = useState('');
+    // const {songs, awards} = form.getFieldsValue()
     const [awards, setAwards] = useState<string[]>([]);
+
+
     const [inputAward, setInputAward] = useState('');
     const [messageApi, contextHolder] = message.useMessage();
+    const [inputSong, setInputSong] = useState('');
 
     const addSongTag = () => {
         const song = inputSong.trim();
         if (song && !songs.includes(song)) {
             const newSongs = [...songs, song];
             setSongs(newSongs);
-            form.setFieldsValue({ songs: newSongs });
+            form.setFieldsValue({songs: newSongs});
         }
         setInputSong('');
     };
@@ -34,7 +37,7 @@ const SearchForm = ({setResult, setIsSearching}: Props) => {
         if (award && !awards.includes(award)) {
             const newAwards = [...awards, award];
             setAwards(newAwards);
-            form.setFieldsValue({ awards: newAwards });
+            form.setFieldsValue({awards: newAwards});
         }
         setInputAward('');
     };
@@ -55,13 +58,13 @@ const SearchForm = ({setResult, setIsSearching}: Props) => {
     const removeSongTag = (removedSong: string) => {
         const newSongs = songs.filter(song => song !== removedSong);
         setSongs(newSongs);
-        form.setFieldsValue({ songs: newSongs });
+        form.setFieldsValue({songs: newSongs});
     };
 
     const removeAwardTag = (removedAward: string) => {
         const newAwards = awards.filter(award => award !== removedAward);
         setAwards(newAwards);
-        form.setFieldsValue({ awards: newAwards });
+        form.setFieldsValue({awards: newAwards});
     };
 
     const onFinish = async (body: SearchFormType) => {
@@ -75,8 +78,9 @@ const SearchForm = ({setResult, setIsSearching}: Props) => {
             return;
         }
 
+        setIsSearching(true);
         const response = await http.post<SearchResultType>('/search', body)
-        if (response){
+        if (response) {
             setIsSearching(false);
             setResult(response.data);
         }
@@ -106,10 +110,11 @@ const SearchForm = ({setResult, setIsSearching}: Props) => {
                         value={inputSong}
                         onChange={(e) => setInputSong(e.target.value)}
                         onKeyDown={(e) => handleKeyDownEnter(e, 'SONG')}
+                        onBlur={addSongTag}
                     />
                     {
                         songs.length > 0 &&
-                        <Space wrap size={[1,6]} className="p-2 mt-2 border rounded-lg flex">
+                        <Space wrap size={[1, 6]} className="p-2 mt-2 border rounded-lg flex">
                             {
                                 songs.map(song => (
                                     <Tag key={song} closable onClose={() => removeSongTag(song)}>{song}</Tag>
@@ -127,10 +132,11 @@ const SearchForm = ({setResult, setIsSearching}: Props) => {
                         value={inputAward}
                         onChange={(e) => setInputAward(e.target.value)}
                         onKeyDown={(e) => handleKeyDownEnter(e, 'AWARD')}
+                        onBlur={addAwardTag}
                     />
                     {
                         awards.length > 0 &&
-                        <Space wrap size={[1,6]} className="p-2 mt-2 border rounded-lg flex">
+                        <Space wrap size={[1, 6]} className="p-2 mt-2 border rounded-lg flex">
                             {
                                 awards.map(award => (
                                     <Tag key={award} closable onClose={() => removeAwardTag(award)}>{award}</Tag>
@@ -148,12 +154,29 @@ const SearchForm = ({setResult, setIsSearching}: Props) => {
                 </Form.Item>
 
                 <Form.Item
-                    className="mb-0"
+                    className="mb-0 w-full"
                     extra={<>Phải điền ít nhất một trong các trường: Bài hát, Giải thưởng hoặc Tiểu sử</>}
                 >
-                    <Button type="primary" className="w-full mb-2" htmlType="submit">
-                        Tìm kiếm<SearchOutlined />
-                    </Button>
+                    <div className="grid grid-cols-2 mb-2">
+                        <Button
+                            className="mr-1"
+                            type="default"
+                            htmlType="reset"
+                            onClick={() => {
+                                form.resetFields()
+                                setSongs([]);
+                                setInputSong('');
+                                setAwards([]);
+                                setInputAward('');
+                                setResult(null)
+                            }}
+                        >
+                            Hoàn tác<UndoOutlined/>
+                        </Button>
+                        <Button className="ml-1" type="primary" htmlType="submit">
+                            Tìm kiếm<SearchOutlined/>
+                        </Button>
+                    </div>
                 </Form.Item>
             </Form>
         </>

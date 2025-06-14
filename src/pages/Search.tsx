@@ -10,10 +10,12 @@ const Search = () => {
     return (
         <div className="grid grid-cols-6 items-start">
             <SearchForm setResult={setResult} setIsSearching={setIsSearching} />
-            <div className="grid col-span-4 space-y-4 ml-4 h-full">
+            <div className="grid col-span-4 space-y-4 ml-4 h-full place-content-center">
                 {
                     result ? (
-                        isSearching ? <Spin/> : (
+                        isSearching ? <Spin tip="Đang tìm kiếm" size="large">
+                            <div style={{width: '10rem'}}/>
+                        </Spin> : (
                             result.length ? (
                                 <div className="grid">
                                     <div className="justify-self-end text-lg">Tìm thấy <strong>{result.length}</strong> kết quả phù hợp</div>
@@ -125,7 +127,6 @@ const Search = () => {
                     ) : <div className="text-center place-content-center text-lg">Kết quả tìm kiếm sẽ hiển thị ở đây</div>
                 }
             </div>
-
         </div>
     )
 }
