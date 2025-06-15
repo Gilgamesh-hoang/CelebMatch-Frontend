@@ -25,8 +25,9 @@ function CompareImage() {
                 <div className="max-w-5xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
                     <div className="p-6">
                         <h2 className="text-2xl font-bold text-blue-600 mb-6 text-center">
-                            So sánh ảnh khuôn mặt ca sĩ
+                            So sánh khuôn mặt ca sĩ
                         </h2>
+
 
                         <div className="grid grid-cols-2 gap-8 justify-items-center">
 
