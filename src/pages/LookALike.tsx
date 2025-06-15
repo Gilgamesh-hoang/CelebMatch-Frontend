@@ -1,9 +1,9 @@
 import {useState} from 'react';
 import ImageUploadForm from '../component/form/ImageUploadForm';
 import LoadingOverlay from '../component/LoadingOverlay';
-import Dialog from '../component/dialog/CustomDialog';
 import http from '../utils/http';
 import {AxiosError} from 'axios';
+import {Modal} from "antd";
 
 type LookalikeResultItem = {
     singer: {
@@ -94,7 +94,7 @@ function LookALike() {
             <main className="flex-grow container mx-auto px-4 py-8">
                 <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
                     <div className="p-6">
-                        <h2 className="text-2xl font-bold text-blue-600 mb-6">
+                        <h2 className="text-2xl font-bold text-blue-600 mb-6 text-center">
                             Tìm người nổi tiếng giống bạn nhất
                         </h2>
 
@@ -139,12 +139,25 @@ function LookALike() {
                     </div>
                 </div>
 
-                <Dialog
-                    isOpen={showErrorDialog}
-                    onClose={() => setShowErrorDialog(false)}
+                <Modal
+                    open={showErrorDialog}
+                    onCancel={() => setShowErrorDialog(false)}
+                    onOk={() => setShowErrorDialog(false)}
                     title="Lỗi"
-                    message={error}
-                />
+                    footer={null}
+                    centered
+                >
+                    <p>{error}</p>
+                    <div className="text-right">
+                        <button
+                            onClick={() => setShowErrorDialog(false)}
+                            className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+                        >
+                            OK
+                        </button>
+                    </div>
+                </Modal>
+
 
                 {lookalikeResult.length > 0 && (
                     <div className="mt-8 space-y-6">
@@ -170,7 +183,7 @@ function LookALike() {
                                     <div dangerouslySetInnerHTML={{__html: result.singer.songs}}/>
                                 </div>
                                 <p className="mt-2 text-sm text-red-500">
-                                    Mức độ giống: {(result.similarity * 100).toFixed(2)}%
+                                    Mức độ giống: {result.similarity.toFixed(2)}%
                                 </p>
                             </div>
                         ))}

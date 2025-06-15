@@ -4,7 +4,7 @@ import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import './App.css';
 import VerticalNavigationLayout from "./layout/VerticalNavigationLayout";
 import CompareImage from "./pages/CompareImage";
-import FaceUpload from "./pages/FaceUpload";
+import FaceUpload from "./pages/FaceUpload.tsx";
 import LookALike from "./pages/LookALike.tsx";
 import Search from "./pages/Search.tsx";
 
