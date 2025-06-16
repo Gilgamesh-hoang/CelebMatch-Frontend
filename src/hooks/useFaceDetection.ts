@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import http from '../utils/http';
-import { Detection } from '../types/detect-face';
+import {Detection} from "../types/detect-face.type.ts";
 
 interface ServerResponse {
   probability: number;
